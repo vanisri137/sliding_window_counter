@@ -86,17 +86,7 @@ Window:  ←──────────────────────�
 | **Docker Compose** | One-command local stack (Redis + Backend) |
 | **Integration Tests** | TestContainers Redis, full Spring Boot context |
 
----
 
-## Screenshots
-
-> _Add screenshots here after first deployment_
-
-| Dashboard | Rate Limited | Window Visualization |
-|-----------|-------------|----------------------|
-| `screenshot-dashboard.png` | `screenshot-rate-limited.png` | `screenshot-viz.png` |
-
----
 
 ## API Reference
 
