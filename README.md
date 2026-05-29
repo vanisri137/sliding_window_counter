@@ -2,7 +2,7 @@
 
 > **Production-grade Sliding Window Counter Rate Limiter** — Redis · Spring Boot 3 · Next.js 14
 
-A full-stack system that exposes a battle-tested rate-limiting algorithm through REST APIs and
+A full-stack system that exposes a battle-tested Production-inspired Sliding Window Counter Rate Limiter through REST APIs and
 visualises it in real time on a modern dashboard. Built as a portfolio project to demonstrate
 distributed systems, Redis internals, and clean system-design thinking.
 
@@ -39,7 +39,8 @@ distributed systems, Redis internals, and clean system-design thinking.
 │  Hash per client (rate_limit:user1) │
 │  Field = sub-window index           │
 │  Value = request count in bucket    │
-│  HEXPIRE (NX) auto-expires buckets  │
+│  Redis key expiration auto-removes
+   stale buckets
 └─────────────────────────────────────┘
                │
                ▼
@@ -59,7 +60,7 @@ The core algorithm divides the rolling window into fixed-size **sub-windows (buc
 
 1. Each request maps to the current sub-window index: `currentTime / subWindowSize`
 2. The count for that bucket is incremented atomically in a Redis MULTI/EXEC transaction
-3. A field-level TTL (`HEXPIRE … NX`) is set on first write — old buckets expire automatically
+3. A field-level TTL (`EXPIRE … NX`) is set on first write — old buckets expire automatically
 4. Before allowing a request, the sum across all live buckets is compared against the limit
 
 This gives a **smooth sliding window** without the fixed-boundary spikes of a simple counter,
@@ -77,7 +78,7 @@ Window:  ←──────────────────────�
 
 | Feature | Details |
 |---------|---------|
-| **Sliding Window Counter** | Sub-window bucketing with Redis Hash + HEXPIRE |
+| **Sliding Window Counter** | Sub-window bucketing with Redis Hash and automatic expiration |
 | **Multiple Clients** | Independent limits per `clientId` |
 | **Dynamic Config** | Change limit / window / sub-window at runtime via `PUT /api/config` |
 | **Real-Time Dashboard** | Live stat cards, dot timeline, bar chart |
@@ -157,7 +158,7 @@ Reconfigure at runtime — no restart needed.
 | Redis Client | Jedis 5 |
 | Testing | JUnit 5, TestContainers, Spring MockMvc |
 | Containerisation | Docker, Docker Compose |
-| Deployment | Vercel (frontend) · Render / Railway (backend) |
+| Deployment | Vercel (frontend) · Render (backend) |
 
 ---
 
@@ -215,7 +216,7 @@ mvn verify         # includes TestContainers integration tests (requires Docker)
 
 ## Deployment
 
-### Backend — Render / Railway
+### Backend — Render 
 
 1. Push `backend/` to a GitHub repo
 2. Create a new **Web Service** pointing to the `backend/` folder
@@ -252,7 +253,7 @@ npx vercel
 > This project was built as a portfolio piece to showcase practical distributed systems knowledge.
 
 - **Distributed Systems** — shared Redis state across horizontally-scaled instances
-- **Redis Internals** — Hash data structure, field-level TTL via HEXPIRE
+- **Redis Internals** — Hash data structures, expiration policies, transactions
 - **Spring Boot** — REST API design, DI, exception handling, CORS, dynamic config
 - **Rate Limiting** — Sliding Window Counter vs Fixed Window trade-offs
 - **System Design** — component separation, single-responsibility, testability
