@@ -100,53 +100,23 @@ Window:  ←──────────────────────�
 
 ## API Reference
 
-### `POST /api/request`
-Send a request for a client.
+### POST /api/request
+Processes a request and applies rate limiting.
 
-```json
-// Request
-{ "clientId": "user1" }
+### GET /api/stats/{clientId}
+Returns current usage statistics.
 
-// Response 200 — allowed
-{ "allowed": true,  "remainingRequests": 4, "limit": 5, "windowSeconds": 60 }
+### DELETE /api/reset/{clientId}
+Resets request counters for a client.
 
-// Response 429 — rate limited
-{ "allowed": false, "remainingRequests": 0, "limit": 5, "windowSeconds": 60, "message": "Rate limit exceeded" }
-```
+### GET /api/health
+Health check endpoint.
 
-### `GET /api/stats/{clientId}`
-```json
-{
-  "clientId": "user1",
-  "currentRequests": 3,
-  "remainingRequests": 2,
-  "limit": 5,
-  "windowSeconds": 60,
-  "subWindowSeconds": 10
-}
-```
+### GET /api/config
+Returns current rate limiter configuration.
 
-### `DELETE /api/reset/{clientId}`
-Clears Redis state for the client. Returns `204 No Content`.
-
-### `GET /api/health`
-```json
-{ "status": "UP" }
-```
-
-### `GET /api/config`
-```json
-{ "limit": 10, "windowSeconds": 60, "subWindowSeconds": 10 }
-```
-
-### `PUT /api/config`
-Reconfigure at runtime — no restart needed.
-```json
-// Request body
-{ "limit": 20, "windowSeconds": 120, "subWindowSeconds": 15 }
-```
-
----
+### PUT /api/config
+Updates rate limiter configuration at runtime.
 
 ## Tech Stack
 
@@ -165,44 +135,22 @@ Reconfigure at runtime — no restart needed.
 ## Local Setup
 
 ### Prerequisites
-- Java 21, Maven 3.9+
+- Java 21
 - Node.js 20+
-- Docker + Docker Compose
+- Docker
 
-### Option A — Docker Compose (recommended)
+### Run
 
 ```bash
-git clone https://github.com/your-username/distributed-rate-limiter
-cd distributed-rate-limiter
+git clone <repo>
+cd rate-limiter-project
 
-# Start Redis + Spring Boot
 docker compose up --build
-
-# In a second terminal — start the frontend
+```
+# new terminal
 cd frontend
-cp .env.example .env.local
 npm install
 npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
-### Option B — Manual
-
-```bash
-# 1. Start Redis
-docker run -p 6379:6379 redis:7-alpine
-
-# 2. Start Spring Boot backend
-cd backend
-mvn spring-boot:run
-
-# 3. Start Next.js frontend
-cd ../frontend
-cp .env.example .env.local
-npm install
-npm run dev
-```
 
 ### Run Backend Tests
 
