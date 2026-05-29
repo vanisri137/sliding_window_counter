@@ -19,7 +19,8 @@ public class RateLimiterConfig {
 
     @Value("${redis.host:localhost}")
     private String redisHost;
-
+    @Value("${redis.password:}")
+    private String redisPassword;
     @Value("${redis.port:6379}")
     private int redisPort;
 
@@ -30,7 +31,7 @@ public class RateLimiterConfig {
         poolConfig.setMaxIdle(10);
         poolConfig.setMinIdle(2);
         poolConfig.setTestOnBorrow(true);
-        return new JedisPool(poolConfig, redisHost, redisPort);
+        return new JedisPool(poolConfig, redisHost, redisPort,  2000, redisPassword,true);
     }
 
     /**
