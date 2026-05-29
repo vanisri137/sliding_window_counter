@@ -52,28 +52,6 @@ distributed systems, Redis internals, and clean system-design thinking.
 └─────────────────────────────────────┘
 ```
 
----
-
-## Algorithm: Sliding Window Counter
-
-The core algorithm divides the rolling window into fixed-size **sub-windows (buckets)**:
-
-1. Each request maps to the current sub-window index: `currentTime / subWindowSize`
-2. The count for that bucket is incremented atomically in a Redis MULTI/EXEC transaction
-3. A field-level TTL (`EXPIRE … NX`) is set on first write — old buckets expire automatically
-4. Before allowing a request, the sum across all live buckets is compared against the limit
-
-This gives a **smooth sliding window** without the fixed-boundary spikes of a simple counter,
-and without the memory overhead of a sorted-set per user.
-
-```
-Time →  [  bucket 0  |  bucket 1  |  bucket 2  |  bucket 3  ]
-                        ^expires        ^current
-Window:  ←──────────────────────── 60 s ───────────────────→
-```
-
----
-
 ## Features
 
 | Feature | Details |
@@ -172,19 +150,6 @@ npx vercel
 # Set NEXT_PUBLIC_API_URL to your backend URL when prompted
 ```
 
----
-
-## Future Enhancements
-
-- [ ] WebSocket / SSE for true real-time stats push
-- [ ] Per-client configuration overrides
-- [ ] Prometheus metrics endpoint (`/actuator/prometheus`)
-- [ ] Grafana dashboard
-- [ ] Token Bucket algorithm comparison mode
-- [ ] IP-based rate limiting middleware
-- [ ] Admin UI for key inspection
-
----
 
 ## What This Demonstrates
 
