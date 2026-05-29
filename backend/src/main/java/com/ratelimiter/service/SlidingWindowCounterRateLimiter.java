@@ -49,7 +49,7 @@ public class SlidingWindowCounterRateLimiter {
 
             Transaction transaction = jedis.multi();
             transaction.hincrBy(key, Long.toString(currentSubWindow), 1);
-            transaction.hexpire(key, windowSize, NX, String.valueOf(currentSubWindow));
+            transaction.expire(key, (int)windowSize);
             List<Object> result = transaction.exec();
 
             if (result == null || result.isEmpty()) {
