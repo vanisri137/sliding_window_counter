@@ -28,25 +28,43 @@ export default function Dashboard() {
       <header className="border-b border-[#1e1e2e] px-6 py-5 flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-xl tracking-tight text-[#e8e8f0]">
-            Distributed Rate Limiter
+            Distributed Rate Limiter Dashboard
           </h1>
           <p className="text-xs font-mono text-[#4a4a6a] mt-0.5">
-            Sliding Window Counter · Redis · Spring Boot
+            Sliding Window Counter · Redis · Spring Boot • Built by Vani Nandyala
           </p>
         </div>
 
-        {/* Backend status indicator */}
-        <div className="flex items-center gap-2 text-[10px] font-mono">
-          <span className={[
-            'w-2 h-2 rounded-full',
-            backendUp === null  ? 'bg-[#4a4a6a] animate-pulse' :
-            backendUp           ? 'bg-[#00ff87] animate-pulse' :
-                                  'bg-[#ff6b35]',
-          ].join(' ')} />
-          <span className="text-[#4a4a6a]">
-            {backendUp === null ? 'connecting…' : backendUp ? 'backend UP' : 'backend DOWN'}
-          </span>
-        </div>
+       <div className="flex items-center gap-3">
+  <a
+    href="https://github.com/vanisri137/sliding_window_counter"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-3 py-1 border border-[#2a2a3a] rounded-lg text-xs font-mono text-[#e8e8f0] hover:border-[#00ff87] transition"
+  >
+    GitHub
+  </a>
+
+  <div className="flex items-center gap-2 text-[10px] font-mono">
+    <span
+      className={[
+        'w-2 h-2 rounded-full',
+        backendUp === null
+          ? 'bg-[#4a4a6a] animate-pulse'
+          : backendUp
+          ? 'bg-[#00ff87] animate-pulse'
+          : 'bg-[#ff6b35]',
+      ].join(' ')}
+    />
+    <span className="text-[#4a4a6a]">
+      {backendUp === null
+        ? 'connecting…'
+        : backendUp
+        ? 'backend UP'
+        : 'backend DOWN'}
+    </span>
+  </div>
+</div>
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -105,7 +123,7 @@ export default function Dashboard() {
 
         {/* Footer */}
         <footer className="text-center text-[10px] font-mono text-[#4a4a6a] pb-4">
-          Sliding Window Counter · Redis HEXPIRE · Spring Boot 3 · Next.js 14
+          Sliding Window Counter · Redis-backed Rate Limiting · Spring Boot 3 · Next.js 14
         </footer>
       </div>
     </main>
