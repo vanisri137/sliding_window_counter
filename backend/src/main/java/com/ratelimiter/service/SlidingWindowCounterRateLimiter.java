@@ -50,6 +50,8 @@ public class SlidingWindowCounterRateLimiter {
             Transaction transaction = jedis.multi();
             transaction.hincrBy(key, Long.toString(currentSubWindow), 1);
             transaction.expire(key, (int)windowSize);
+            // Ideal implementation (Redis 7.4+ with HEXPIRE):
+// transaction.hexpire(key, windowSize, NX, String.valueOf(currentSubWindow));
             List<Object> result = transaction.exec();
 
             if (result == null || result.isEmpty()) {
