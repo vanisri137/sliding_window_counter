@@ -149,7 +149,8 @@ cd frontend
 npx vercel
 # Set NEXT_PUBLIC_API_URL to your backend URL when prompted
 ```
-
+### Project Demo
+[watch video](Screen%20Recording%202026-06-03%20225658.mp4)
 
 ## What This Demonstrates
 
